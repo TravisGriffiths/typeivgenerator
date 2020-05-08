@@ -1,0 +1,237 @@
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <!-- React -->
+    <script crossorigin src="https://unpkg.com/react@16/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+    <!-- JSX -->
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+
+    <!-- LoDash -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.15/lodash.min.js" integrity="sha256-VeNaFBVDhoX3H+gJ37DpT/nTuZTdjYro9yBruHjVmoQ=" crossorigin="anonymous"></script>
+
+
+    <!-- Materialize -->
+    <!-- Compiled and minified CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <!-- Compiled and minified JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+
+
+    <script type="text/babel">
+
+      const roll = () => Math.ceil(Math.random() * 6)
+
+      const threeDSix = () => (roll() + roll() + roll())
+
+      const getPointScore = (raw) => {
+        const scores = {
+          3: -15,
+          4: -12,
+          5: -8,
+          6: -6,
+          7: -4,
+          8: -2,
+          9: -1,
+          10: 0,
+          11: 0,
+          12: 1,
+          13: 2,
+          14: 4,
+          15: 6,
+          16: 8,
+          17: 12,
+          18: 15,
+        }
+        return scores[raw]
+      }
+
+      const getScores = () => {
+        return {
+          STR: threeDSix(),
+          DEX: threeDSix(),
+          CON: threeDSix(),
+          INT: threeDSix(),
+          WIS: threeDSix(),
+          CHA: threeDSix()
+        }
+      }
+
+      const getBonus = (stat) => {
+        return {
+          3: -4,
+          4: -3,
+          5: -3,
+          6: -2,
+          7: -2,
+          8: -1,
+          9: -1,
+          10: 0,
+          11: 0,
+          12: 1,
+          13: 1,
+          14: 2,
+          15: 2,
+          16: 3,
+          17: 3,
+          18: 4
+        }[stat]
+      }
+
+      const getBonusStr = (bonus) => {
+        if(bonus === 0) {
+          return '-'
+        }
+        if(bonus > 0) {
+          return `+${bonus}`
+        } else {
+          return String(bonus)
+        }
+      }
+
+      const getSpread = (scores) => {
+        return _.max(Object.values(scores)) - _.min(Object.values(scores))
+      }
+
+      const getTotal = (scores) => {
+        let total = 0
+        Object.values(scores).forEach((s) => total += getBonus(s))
+        return total
+      }
+
+      const getPC = () => {
+        let scores = getScores()
+        let total = getTotal(scores)
+        while(getSpread(scores) < 8 || total < 3 || total > 9) {
+          scores = getScores()
+          total = getTotal(scores)
+        }
+        return scores
+      }
+
+      const getPCSet = () => {
+        const pcs = []
+        _.times(12, () => pcs.push(getPC()))
+
+        return {
+          PCS: pcs,
+          highest: _.max(pcs.map((pc) => pc.TOTAL))
+        }
+      }
+
+      const Bonus = (props) => {
+        const bonusStr = getBonusStr(getBonus(props.stat))
+        return (
+          <div className="bonus">{bonusStr}</div>
+        )
+      }
+
+      const RawPC = (props) => {
+        return (
+          <div className="card pc">
+            <div className="stat">
+              <div className="statName">STR: </div>
+              <Bonus stat={props.stats.STR} />
+              ({props.stats.STR})
+            </div>
+            <div className="stat">
+              <span className="statName">DEX: </span>
+              <Bonus stat={props.stats.DEX} />
+              ({props.stats.DEX})
+            </div>
+            <div className="stat">
+              <span className="statName">CON: </span>
+              <Bonus stat={props.stats.CON} />
+              ({props.stats.CON})
+            </div>
+            <div className="stat">
+              <span className="statName">INT: </span>
+              <Bonus stat={props.stats.INT} />
+              ({props.stats.INT})
+            </div>
+            <div className="stat">
+              <span className="statName">WIS: </span>
+              <Bonus stat={props.stats.WIS} />
+              ({props.stats.WIS})
+            </div>
+            <div className="stat">
+              <span className="statName">CHA: </span>
+              <Bonus stat={props.stats.CHA} />
+              ({props.stats.CHA})
+            </div>
+          </div>
+        )
+      }
+
+
+      const PCApp = (props) => {
+        let pcData = getPCSet()
+        return (
+          <div>
+            { pcData.PCS.sort((a, b) => getTotal(b) - getTotal(a)).map((pc) =>
+              <RawPC key={_.uniqueId('PCkey_')} stats={pc} />
+            )}
+          </div>
+        )
+      }
+
+      ReactDOM.render(<PCApp />, document.getElementById('charApp'))
+
+    </script>
+
+    <style>
+      body {
+        margin: 2em;
+      }
+      .pc {
+        padding: 1em;
+        display: table;
+      }
+      .bonus {
+        font-size: 16px;
+        font-weight: bold;
+        margin-left: 1em;
+        margin-right: 1em;
+      }
+      .statName {
+        font-size: 18px;
+        font-weight: bold;
+      }
+      .stat > div {
+        display: inline;
+      }
+    </style>
+
+    <title>React Hack</title>
+
+  </head>
+  <body>
+    This is a hack from very Old Skool D&D First Edition Method IV for character
+    generation. The original method has a player roll 3d6 6 times, place all the
+    rolls in order, and do this 11 more times to make a potential pool of 12
+    characters. They then select the one they want to play. This does the same,
+    but rolls them all in an instant AND does some selection to ensure that the
+    12 possiblilties conform to some limitations:
+    <p>
+    1. Remove the utter worst characters you would never consider playing.
+    </p>
+    <p>
+    2. Remove the "supermen" lucky rolls at the very top that make it less fun
+    for the rest of the group to play with your character because you are the
+    best at doing everything.
+  </p>
+  <p>
+    3. Ensure at least some level of strength and weakness in each character.
+    That means that
+    every roll needs to have at least one stat that is a bit weak. This is to try
+    to get rid of the "all 12s" characters that are just above average across
+    the board with no flavor.
+  </p>
+  <p>
+    Choose one of the 12 possible characters below
+  </p>
+    <div id="charApp"></div>
+
+
+  </body>
+</html>
