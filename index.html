@@ -167,11 +167,52 @@
       const PCApp = (props) => {
         let pcData = getPCSet()
         return (
-          <div>
-            { pcData.PCS.sort((a, b) => getTotal(b) - getTotal(a)).map((pc) =>
-              <RawPC key={_.uniqueId('PCkey_')} stats={pc} />
-            )}
-          </div>
+          <table>
+            <tr>
+              <td>
+                <RawPC key={_.uniqueId('PCkey_')} stats={pcData.PCS[0]} />
+              </td>
+              <td>
+                <RawPC key={_.uniqueId('PCkey_')} stats={pcData.PCS[1]} />
+              </td>
+              <td>
+                <RawPC key={_.uniqueId('PCkey_')} stats={pcData.PCS[2]} />
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <RawPC key={_.uniqueId('PCkey_')} stats={pcData.PCS[3]} />
+              </td>
+              <td>
+                <RawPC key={_.uniqueId('PCkey_')} stats={pcData.PCS[4]} />
+              </td>
+              <td>
+                <RawPC key={_.uniqueId('PCkey_')} stats={pcData.PCS[5]} />
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <RawPC key={_.uniqueId('PCkey_')} stats={pcData.PCS[6]} />
+              </td>
+              <td>
+                <RawPC key={_.uniqueId('PCkey_')} stats={pcData.PCS[7]} />
+              </td>
+              <td>
+                <RawPC key={_.uniqueId('PCkey_')} stats={pcData.PCS[8]} />
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <RawPC key={_.uniqueId('PCkey_')} stats={pcData.PCS[9]} />
+              </td>
+              <td>
+                <RawPC key={_.uniqueId('PCkey_')} stats={pcData.PCS[10]} />
+              </td>
+              <td>
+                <RawPC key={_.uniqueId('PCkey_')} stats={pcData.PCS[11]} />
+              </td>
+            </tr>
+          </table>
         )
       }
 
@@ -185,7 +226,6 @@
       }
       .pc {
         padding: 1em;
-        display: table;
       }
       .bonus {
         font-size: 16px;

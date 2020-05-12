@@ -1,0 +1,162 @@
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <!-- React -->
+    <script crossorigin src="https://unpkg.com/react@16/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+    <!-- JSX -->
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+
+    <!-- LoDash -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.15/lodash.min.js" integrity="sha256-VeNaFBVDhoX3H+gJ37DpT/nTuZTdjYro9yBruHjVmoQ=" crossorigin="anonymous"></script>
+
+
+    <!-- Materialize -->
+    <!-- Compiled and minified CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <!-- Compiled and minified JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+
+
+    <script type="text/babel">
+
+      const roll = () => Math.ceil(Math.random() * 6)
+
+      const threeDSix = () => (roll() + roll() + roll())
+
+      const HitTable = (props) => {
+        return (
+          <table>
+            <tr>
+              <th>PC Roll</th>
+              <th>Monster AC Hit</th>
+            </tr>
+            <tr>
+              <td>1</td>
+              <td>Critical Hit</td>
+            </tr>
+            <tr>
+              <td>2</td>
+              <td>{19 + props.hitBonus}</td>
+            </tr>
+            <tr>
+              <td>3</td>
+              <td>{18 + props.hitBonus}</td>
+            </tr>
+            <tr>
+              <td>4</td>
+              <td>{17 + props.hitBonus}</td>
+            </tr>
+            <tr>
+              <td>5</td>
+              <td>{16 + props.hitBonus}</td>
+            </tr>
+            <tr>
+              <td>6</td>
+              <td>{15 + props.hitBonus}</td>
+            </tr>
+            <tr>
+              <td>7</td>
+              <td>{14 + props.hitBonus}</td>
+            </tr>
+            <tr>
+              <td>8</td>
+              <td>{13 + props.hitBonus}</td>
+            </tr>
+            <tr>
+              <td>9</td>
+              <td>{12 + props.hitBonus}</td>
+            </tr>
+            <tr>
+              <td>10</td>
+              <td>{11 + props.hitBonus}</td>
+            </tr>
+            <tr>
+              <td>11</td>
+              <td>{10 + props.hitBonus}</td>
+            </tr>
+            <tr>
+              <td>12</td>
+              <td>{9 + props.hitBonus}</td>
+            </tr>
+            <tr>
+              <td>13</td>
+              <td>{8 + props.hitBonus}</td>
+            </tr>
+            <tr>
+              <td>14</td>
+              <td>{7 + props.hitBonus}</td>
+            </tr>
+            <tr>
+              <td>15</td>
+              <td>{6 + props.hitBonus}</td>
+            </tr>
+            <tr>
+              <td>16</td>
+              <td>{5 + props.hitBonus}</td>
+            </tr>
+            <tr>
+              <td>17</td>
+              <td>{4 + props.hitBonus}</td>
+            </tr>
+            <tr>
+              <td>18</td>
+              <td>{3 + props.hitBonus}</td>
+            </tr>
+            <tr>
+              <td>19</td>
+              <td>{2 + props.hitBonus}</td>
+            </tr>
+            <tr>
+              <td>20</td>
+              <td>Critical Miss</td>
+            </tr>
+          </table>
+        )
+      }
+
+      const HitApp = (props) => {
+
+        const [hitBonus, setHitBonus] = React.useState(0)
+
+        const updateTable = (a, b, c) => {
+          let hb = Number(a.target.value) || 0
+          setHitBonus(hb)
+        }
+
+        return (
+
+          <div>
+            Enter Hit Bonus (or Penalty) Below:
+            <input type="text" onChange={updateTable} />
+            <HitTable  hitBonus={hitBonus} />
+          </div>
+        )
+      }
+
+      ReactDOM.render(<HitApp />, document.getElementById('hitApp'))
+
+    </script>
+
+    <style>
+      body {
+        margin: 2em;
+      }
+
+    </style>
+
+    <title>React Hack</title>
+
+  </head>
+  <body>
+    <h2>Single Roll Combat Resolution</h2>
+    When a PC rolls to hit vs an opponent able to attack them, take the converse
+    of the die roll they make on a 1-20 scale and the opposing monster hits that
+    AC. This is fully possible to allow both combatants to hit, both to miss or
+    only one to hit or miss depending on the bonuses for each. Put in the hit
+    bonus below for the table to update on the AC hit with each PC roll.
+    <div id="hitApp"></div>
+
+
+  </body>
+</html>
